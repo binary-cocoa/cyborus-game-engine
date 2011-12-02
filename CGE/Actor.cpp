@@ -27,4 +27,9 @@ namespace CGE
         mPreviousActor = NULL;
         mNextActor = NULL;
     }
+
+    void Actor::display()
+    {
+        mModel->display();
+    }
 }

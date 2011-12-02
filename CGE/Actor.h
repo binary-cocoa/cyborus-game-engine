@@ -16,7 +16,8 @@ namespace CGE
             Actor(Model* inModel);
             virtual ~Actor();
 
-            inline void display() { mModel->display(); }
+
+            virtual void display();
 
             inline void resetMatrix()
             {
@@ -95,9 +96,10 @@ namespace CGE
 
             void removeFromBin();
 
-        private:
+        protected:
             Model* mModel;
 
+        private:
             vec3d mRotation;
             vec3d mTranslation;
             vec3d mScale;

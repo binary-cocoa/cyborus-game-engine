@@ -114,6 +114,13 @@ namespace CGE
                 return *this;
             }
 
+            Vector& operator+=(const T* inVector)
+            {
+                Vector v(*this);
+                addVectors<T, N>(v, inVector, mData);
+                return *this;
+            }
+
         private:
             T mData[N];
     };

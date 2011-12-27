@@ -14,6 +14,7 @@ namespace CGE
 {
     SoundBuffer::SoundBuffer(const char* inFile) : mHandle(0)
     {
+        // These just silence a few warnings. :P
         (void)OV_CALLBACKS_DEFAULT;
         (void)OV_CALLBACKS_NOCLOSE;
         (void)OV_CALLBACKS_STREAMONLY;

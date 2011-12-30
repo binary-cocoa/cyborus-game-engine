@@ -132,6 +132,8 @@
 		<Unit filename="../CGE/UI/EventListener.h" />
 		<Unit filename="../CGE/UI/Label.cpp" />
 		<Unit filename="../CGE/UI/Label.h" />
+		<Unit filename="../CGE/UI/TextBox.cpp" />
+		<Unit filename="../CGE/UI/TextBox.h" />
 		<Unit filename="../CGE/UI/UserInterface.cpp" />
 		<Unit filename="../CGE/UI/UserInterface.h" />
 		<Unit filename="../CGE/UI/Widget.cpp" />

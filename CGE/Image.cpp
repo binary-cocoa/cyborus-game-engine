@@ -78,7 +78,8 @@ namespace CGE
         findFormat();
     }
 
-    void Image::loadText(const Font& inFont, const char* inText)
+    void Image::loadText(const Font& inFont, const char* inText, Uint8 inRed,
+        Uint8 inGreen, Uint8 inBlue)
     {
         static const char* functionName = "Image::loadText";
 
@@ -87,7 +88,7 @@ namespace CGE
 
         destroy();
 
-        SDL_Color c = { 255, 255, 255, 255 };
+        SDL_Color c = { inRed, inGreen, inBlue, 255 };
         mData = TTF_RenderText_Blended(inFont.mFont, inText, c);
         findFormat();
     }

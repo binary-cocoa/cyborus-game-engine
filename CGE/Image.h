@@ -17,7 +17,8 @@ namespace CGE
 
             inline bool isValid() { return !!mData; }
             void loadFile(const char* inFile);
-            void loadText(const Font& inFont, const char* inText);
+            void loadText(const Font& inFont, const char* inText,
+                Uint8 inRed = 255, Uint8 inGreen = 255, Uint8 inBlue = 255);
 
             void blitOnto(Image& inImage) const;
             void loadIntoTexture(GLenum inTarget = GL_TEXTURE_2D) const;

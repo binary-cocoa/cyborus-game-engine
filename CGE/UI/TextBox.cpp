@@ -1,6 +1,8 @@
 #include "TextBox.h"
 #include "../Image.h"
 
+#include <iostream>
+
 namespace CGE
 {
     TextBox::TextBox(const Font& inFont) : mFont(inFont)
@@ -54,6 +56,11 @@ namespace CGE
 
         textImage.loadText(mFont, inText, inRed, inGreen, inBlue);
 
-        mTexture.loadImage(textImage);
+        if (textImage.isValid())
+        {
+            Image textureImage;
+            textureImage.powersOfTwoRectangleFrom(textImage);
+            mTexture.loadImage(textureImage);
+        }
     }
 }

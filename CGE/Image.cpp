@@ -10,15 +10,15 @@ using namespace std;
 namespace CGE
 {
 #if SDL_BYTEORDER == SDL_BIG_ENDIAN
-    const Uint32 redMask   = 0xff000000;
-    const Uint32 greenMask = 0x00ff0000;
-    const Uint32 blueMask  = 0x0000ff00;
-    const Uint32 alphaMask = 0x000000ff;
+    static const Uint32 redMask   = 0xff000000;
+    static const Uint32 greenMask = 0x00ff0000;
+    static const Uint32 blueMask  = 0x0000ff00;
+    static const Uint32 alphaMask = 0x000000ff;
 #else
-    const Uint32 redMask   = 0x000000ff;
-    const Uint32 greenMask = 0x0000ff00;
-    const Uint32 blueMask  = 0x00ff0000;
-    const Uint32 alphaMask = 0xff000000;
+    static const Uint32 redMask   = 0x000000ff;
+    static const Uint32 greenMask = 0x0000ff00;
+    static const Uint32 blueMask  = 0x00ff0000;
+    static const Uint32 alphaMask = 0xff000000;
 #endif
 
     Image::Image() : mData(NULL), mFormat(0)
@@ -35,13 +35,13 @@ namespace CGE
         if (inWidth < 1 || inHeight < 1) return; // TODO: report error
 
         Surface data = SDL_CreateRGBSurface(SDL_SWSURFACE | SDL_SRCALPHA,
-            inWidth, inHeight, 0, redMask, greenMask, blueMask, alphaMask);
-        SDL_SetAlpha(data, SDL_SRCALPHA, 0xff);
+            inWidth, inHeight, 32, redMask, greenMask, blueMask, alphaMask);
 
         if (!data) return;
 
-        mData = SDL_DisplayFormatAlpha(data);
-        SDL_FreeSurface(data);
+        //mData = SDL_DisplayFormatAlpha(data);
+        mData = data;
+        //SDL_FreeSurface(data);
         findFormat();
     }
 
@@ -54,6 +54,30 @@ namespace CGE
     Image::~Image()
     {
         destroy();
+    }
+
+    void Image::powersOfTwoRectangleFrom(const Image& inImage)
+    {
+        if (inImage.isValid())
+        {
+            int w = 1;
+            int h = 1;
+
+            while (w < inImage.width()) w *= 2;
+            while (h < inImage.height()) h *= 2;
+
+            Surface s = inImage.mData;
+            mData = SDL_CreateRGBSurface(SDL_SWSURFACE | SDL_SRCALPHA, w, h,
+                s->format->BitsPerPixel, s->format->Rmask, s->format->Gmask,
+                s->format->Bmask, s->format->Amask);
+
+            SDL_SetAlpha(s, 0, SDL_ALPHA_OPAQUE);
+            SDL_SetAlpha(mData, SDL_SRCALPHA, SDL_ALPHA_TRANSPARENT);
+            SDL_BlitSurface(s, NULL, mData, NULL);
+            SDL_SetAlpha(mData, SDL_SRCALPHA, s->format->alpha);
+
+            findFormat();
+        }
     }
 
     void Image::loadFile(const char* inFile)
@@ -81,10 +105,7 @@ namespace CGE
     void Image::loadText(const Font& inFont, const char* inText, Uint8 inRed,
         Uint8 inGreen, Uint8 inBlue)
     {
-        static const char* functionName = "Image::loadText";
-
-        if (!inText || !*inText)
-            throw Exception(functionName, "invalid text");
+        if (!inText || !*inText) inText = " ";
 
         destroy();
 

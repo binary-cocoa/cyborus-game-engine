@@ -34,15 +34,10 @@ namespace CGE
     {
         if (inWidth < 1 || inHeight < 1) return; // TODO: report error
 
-        Surface data = SDL_CreateRGBSurface(SDL_SWSURFACE | SDL_SRCALPHA,
-            inWidth, inHeight, 32, redMask, greenMask, blueMask, alphaMask);
+        mData = SDL_CreateRGBSurface(SDL_SWSURFACE | SDL_SRCALPHA,
+            inWidth, inHeight, 0, redMask, greenMask, blueMask, alphaMask);
 
-        if (!data) return;
-
-        //mData = SDL_DisplayFormatAlpha(data);
-        mData = data;
-        //SDL_FreeSurface(data);
-        findFormat();
+        if (mData) findFormat();
     }
 
     Image::Image(const Image& inImage)
@@ -152,15 +147,15 @@ namespace CGE
 
     void Image::findFormat()
     {
-        mColors = mData->format->BytesPerPixel;
-        if (mColors == 4)
+        int colors = mData->format->BytesPerPixel;
+        if (colors == 4)
         {
             if (mData->format->Rmask == 0x000000ff)
                 mFormat = GL_RGBA;
             else
                 mFormat = GL_BGRA;
         }
-        else if (mColors == 3)
+        else if (colors == 3)
         {
             if (mData->format->Rmask == 0x000000ff)
                 mFormat = GL_RGB;

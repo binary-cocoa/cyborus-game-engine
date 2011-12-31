@@ -32,7 +32,6 @@ namespace CGE
             void findFormat();
 
             Surface mData;
-            int mColors;
             GLenum mFormat;
     };
 }

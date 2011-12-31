@@ -60,6 +60,8 @@ namespace CGE
     {
         if (inImage.isValid())
         {
+            destroy();
+
             int w = 1;
             int h = 1;
 

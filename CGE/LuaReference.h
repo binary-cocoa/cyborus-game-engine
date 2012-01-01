@@ -12,10 +12,11 @@ namespace CGE
             ~LuaReference();
 
             inline bool isSet() const { return mReference != LUA_NOREF; }
+            inline operator bool() const { return isSet(); }
 
             void unset();
             void set(lua_State* inState);
-            void get() const;
+            bool get() const;
 
         protected:
         private:

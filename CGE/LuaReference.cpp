@@ -68,9 +68,6 @@ namespace CGE
 
     void LuaReference::copyFrom(const LuaReference& inLuaReference)
     {
-        if (inLuaReference.get())
-            set(inLuaReference.mState);
-        else
-            mState = NULL;
+        if (inLuaReference.get()) set(inLuaReference.mState);
     }
 }

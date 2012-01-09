@@ -23,10 +23,8 @@ namespace CGE
 
         if (mFollow)
         {
-            const vec3d& position = mFollow->getPosition();
-
-            mTranslateMatrix.translate(-position[0], -position[1],
-                -position[2]);
+            mTranslateMatrix.translate(-mFollow[0], -mFollow[1],
+                -mFollow[2]);
         }
         else
         {
@@ -104,21 +102,15 @@ namespace CGE
          mPosition[1] += dyp;
     }
 
-    void Camera::unfollow(bool inCopyEntityPosition)
+    void Camera::unfollow(bool inCopyTargetPosition)
     {
-        if (mFollow && inCopyEntityPosition)
-        {
-            const vec3d& position = mFollow->getPosition();
-            mPosition[0] = float(position[0]);
-            mPosition[1] = float(position[1]);
-            mPosition[2] = float(position[2]);
-        }
+        if (mFollow && inCopyTargetPosition) mPosition = mFollow;
 
         mFollow = NULL;
     }
 
-    void Camera::unfollow(Entity* inEntity, bool inCopyEntityPosition)
+    void Camera::unfollow(const float* inTarget, bool inCopyTargetPosition)
     {
-        if (mFollow == inEntity) unfollow(inEntity, inCopyEntityPosition);
+        if (mFollow == inTarget) unfollow(inCopyTargetPosition);
     }
 }

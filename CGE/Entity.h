@@ -34,6 +34,11 @@ namespace CGE
             inline void setMass(double inMass)      { mMass = inMass;       }
             inline void setIsBeingDeleted()         { mIsBeingDeleted = true; }
 
+            inline const vec3f& getTranslation() const
+            {
+                return mTranslation;
+            }
+
             void calculateForwardDirection()
             {
                 // For now, the first actor added is assumed to be the
@@ -138,6 +143,7 @@ namespace CGE
             inline void setPosition(const vec3d& inPosition)
             {
                 mPosition = inPosition;
+                for (size_t i = 0; i < 3; ++i) mTranslation[i] = mPosition[i];
             }
 
             size_t addActor(Actor* inActor);
@@ -147,6 +153,7 @@ namespace CGE
             vec3d mVelocity;
             vec3d mMomentum;
             vec3d mPosition;
+            vec3f mTranslation; // pre-converted values for camera following
             vec3d mRotation;
             vec3d mDefaultRotation;
             vec3d mMaxTurnSpeed;

@@ -43,6 +43,8 @@ namespace CGE
         mPosition[1] += mVelocity[1];
         mPosition[2] += mVelocity[2];
 
+        for (size_t i = 0; i < 3; ++i) mTranslation[i] = mPosition[i];
+
         calculateForwardDirection();
         mActors[1]->resetMatrix();
         mActors[1]->translate(mForwardDirection[0], mForwardDirection[1], mForwardDirection[2]);

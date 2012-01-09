@@ -3,7 +3,6 @@
 
 #include "Matrix4x4.h"
 #include "Vectors.h"
-#include "Entity.h"
 
 namespace CGE
 {
@@ -23,9 +22,9 @@ namespace CGE
                 return mAngleMatrix;
             }
 
-            inline void follow(Entity* inEntity)
+            inline void follow(const float* inTarget)
             {
-                mFollow = inEntity;
+                mFollow = inTarget;
             }
 
             void update();
@@ -39,8 +38,9 @@ namespace CGE
             void changePosition(float inX, float inY, float inZ);
             void smartPan(float inX, float inY);
 
-            void unfollow(bool inCopyEntityPosition = true);
-            void unfollow(Entity* inEntity, bool inCopyEntityPosition = true);
+            void unfollow(bool inCopyTargetPosition = true);
+            void unfollow(const float* inTarget,
+                bool inCopyTargetPosition = true);
 
         private:
             mat4f mTranslateMatrix;
@@ -49,7 +49,7 @@ namespace CGE
             float mDistance;
             float mRotation;
             float mAngle;
-            Entity* mFollow;
+            const float* mFollow;
     };
 }
 

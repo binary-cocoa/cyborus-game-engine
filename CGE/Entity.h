@@ -14,7 +14,7 @@ namespace CGE
     class Entity : public SceneGraphNode
     {
         public:
-            Entity(lua_State* inState);
+            Entity(const LuaReference& inLuaTable);
             virtual ~Entity();
 
             void update();

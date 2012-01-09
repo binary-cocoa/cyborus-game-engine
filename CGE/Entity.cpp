@@ -4,11 +4,11 @@
 
 namespace CGE
 {
-    Entity::Entity(lua_State* inState) : mMass(1.0), mRadius(1.0),
-        mMaxSpeed(0.0), mCurrentSpeed(0.0), mIsBeingDeleted(false)
+    Entity::Entity(const LuaReference& inLuaTable) : mMass(1.0), mRadius(1.0),
+        mMaxSpeed(0.0), mCurrentSpeed(0.0), mLuaTable(inLuaTable),
+        mIsBeingDeleted(false)
     {
-        assert(inState != NULL);
-        mLuaTable.set(inState);
+        assert(inLuaTable.isSet());
     }
 
     Entity::~Entity()
@@ -47,7 +47,8 @@ namespace CGE
 
         calculateForwardDirection();
         mActors[1]->resetMatrix();
-        mActors[1]->translate(mForwardDirection[0], mForwardDirection[1], mForwardDirection[2]);
+        mActors[1]->translate(mForwardDirection[0], mForwardDirection[1],
+            mForwardDirection[2]);
 
 
         mTransform.loadIdentity();

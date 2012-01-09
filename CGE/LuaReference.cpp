@@ -10,7 +10,7 @@ namespace CGE
     }
 
     LuaReference::LuaReference(const LuaReference& inLuaReference)
-        : mReference(LUA_NOREF)
+        : mState(NULL), mReference(LUA_NOREF)
     {
         copyFrom(inLuaReference);
     }

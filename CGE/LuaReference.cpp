@@ -9,9 +9,21 @@ namespace CGE
         if (inState) set(inState);
     }
 
+    LuaReference::LuaReference(const LuaReference& inLuaReference)
+        : mReference(LUA_NOREF)
+    {
+        copyFrom(inLuaReference);
+    }
+
     LuaReference::~LuaReference()
     {
         unset();
+    }
+
+    LuaReference& LuaReference::operator=(const LuaReference& inLuaReference)
+    {
+        copyFrom(inLuaReference);
+        return *this;
     }
 
     void LuaReference::set(lua_State* inState)
@@ -29,6 +41,9 @@ namespace CGE
         }
     }
 
+    // Returns whether this LuaReference is set. This prevents having to do
+    // two checks via:
+    //     if (ref.isSet()) ref.get(); // Checks again inside the get function.
     bool LuaReference::get() const
     {
         if (isSet())
@@ -51,4 +66,11 @@ namespace CGE
         }
     }
 
+    void LuaReference::copyFrom(const LuaReference& inLuaReference)
+    {
+        if (inLuaReference.get())
+            set(inLuaReference.mState);
+        else
+            mState = NULL;
+    }
 }

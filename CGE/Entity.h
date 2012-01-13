@@ -34,9 +34,9 @@ namespace CGE
             inline void setMass(double inMass)      { mMass = inMass;       }
             inline void setIsBeingDeleted()         { mIsBeingDeleted = true; }
 
-            void addLocalMomentumVector(const vec3d& inMomentum);
+            void addLocalMomentumVector(vec3d inMomentum);
             void addGlobalMomentumVector(const vec3d& inMomentum);
-            void addLocalVelocityVector(const vec3d& inVelocity);
+            void addLocalVelocityVector(vec3d inVelocity);
             void addGlobalVelocityVector(const vec3d& inVelocity);
 
             inline const vec3f& getTranslation() const
@@ -69,6 +69,30 @@ namespace CGE
                 mForwardDirection = result;
                 transformation.transform(initialUp, result);
                 mUpDirection = result;
+            }
+
+
+            void calculateLocalOrientation(vec3d& inMomentum)
+            {
+                vec3d rotation = mActors[0]->getRotation();
+
+                Matrix4x4<double> transformation;
+                transformation.rotateY(rotation[1]);
+                transformation.rotateX(rotation[0]);
+                transformation.rotateZ(rotation[2]);
+
+                vec4d initial;
+                initial[0] = inMomentum[0];
+                initial[1] = inMomentum[1];
+                initial[2] = inMomentum[2];
+                initial[3] = 1.0;
+                vec4d result;
+
+                transformation.transform(initial, result);
+
+                inMomentum[0] = result[0];
+                inMomentum[1] = result[1];
+                inMomentum[2] = result[2];
             }
 
 

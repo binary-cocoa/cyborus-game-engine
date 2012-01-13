@@ -62,9 +62,10 @@ namespace CGE
     *   Moves the entity based on it's local orientation, taking into
     *   account mass and friction.
     **/
-    void Entity::addLocalMomentumVector(const vec3d& inMomentum)
+    void Entity::addLocalMomentumVector(vec3d inMomentum)
     {
-
+        calculateLocalOrientation(inMomentum);
+        addGlobalMomentumVector(inMomentum);
     }
 
     /**
@@ -84,9 +85,10 @@ namespace CGE
     *   Moves the entity based on it's local orientation, ignoring
     *   mass and friction
     **/
-    void Entity::addLocalVelocityVector(const vec3d& inVelocity)
+    void Entity::addLocalVelocityVector(vec3d inVelocity)
     {
-
+        calculateLocalOrientation(inVelocity);
+        addGlobalVelocityVector(inVelocity);
     }
 
     /**
@@ -95,7 +97,10 @@ namespace CGE
     **/
     void Entity::addGlobalVelocityVector(const vec3d& inVelocity)
     {
-
+        const vec3d& vec = getMomentum();
+        mVelocity[0] = (vec[0] + inVelocity[0]);
+        mVelocity[1] = (vec[1] + inVelocity[1]);
+        mVelocity[2] = (vec[2] + inVelocity[2]);
     }
 
     void Entity::impact(const vec3d& inMomentum)

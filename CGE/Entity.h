@@ -34,12 +34,17 @@ namespace CGE
             inline void setMass(double inMass)      { mMass = inMass;       }
             inline void setIsBeingDeleted()         { mIsBeingDeleted = true; }
 
+            void addLocalMomentumVector(const vec3d& inMomentum);
+            void addGlobalMomentumVector(const vec3d& inMomentum);
+            void addLocalVelocityVector(const vec3d& inVelocity);
+            void addGlobalVelocityVector(const vec3d& inVelocity);
+
             inline const vec3f& getTranslation() const
             {
                 return mTranslation;
             }
 
-            void calculateForwardDirection()
+            void calculateLocalOrientation()
             {
                 // For now, the first actor added is assumed to be the
                 // base direction actor.
@@ -51,14 +56,21 @@ namespace CGE
                 transformation.rotateX(rotation[0]);
                 transformation.rotateZ(rotation[2]);
 
-                vec4d initial;
-                initial[2] = -1.0;
-                initial[3] = 1.0;
+                vec4d initialForward;
+                initialForward[2] = -1.0;
+                initialForward[3] = 1.0;
+
+                vec4d initialUp;
+                initialUp[1] = 1.0; //not really sure this is correct, but testing it
+                initialUp[3] = 1.0;
 
                 vec4d result;
-                transformation.transform(initial, result);
+                transformation.transform(initialForward, result);
                 mForwardDirection = result;
+                transformation.transform(initialUp, result);
+                mUpDirection = result;
             }
+
 
             inline Actor* getActor(size_t inIndex)
             {
@@ -172,7 +184,10 @@ namespace CGE
 
             std::vector<Actor*> mActors;
 
+            //used to determine the entities local orientation
             vec3d mForwardDirection;
+            vec3d mUpDirection;
+
             bool mIsBeingDeleted;
     };
 }

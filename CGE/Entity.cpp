@@ -45,7 +45,7 @@ namespace CGE
 
         for (size_t i = 0; i < 3; ++i) mTranslation[i] = mPosition[i];
 
-        calculateForwardDirection();
+        calculateLocalOrientation();
 
 
         mTransform.loadIdentity();
@@ -56,6 +56,46 @@ namespace CGE
         mTransform.rotateY(mDefaultRotation[1]);
         mTransform.rotateX(mDefaultRotation[0]);
         mTransform.rotateZ(mDefaultRotation[2]);
+    }
+
+    /**
+    *   Moves the entity based on it's local orientation, taking into
+    *   account mass and friction.
+    **/
+    void Entity::addLocalMomentumVector(const vec3d& inMomentum)
+    {
+
+    }
+
+    /**
+    *   Moves the entity ignoring it's local orientation, taking into
+    *   account mass and friction
+    **/
+    void Entity::addGlobalMomentumVector(const vec3d& inMomentum)
+    {
+        const vec3d& vec = getMomentum();
+        mVelocity[0] = (vec[0] + inMomentum[0]) / getMass();
+        mVelocity[1] = (vec[1] + inMomentum[1]) / getMass();
+        mVelocity[2] = (vec[2] + inMomentum[2]) / getMass();
+    }
+
+
+    /**
+    *   Moves the entity based on it's local orientation, ignoring
+    *   mass and friction
+    **/
+    void Entity::addLocalVelocityVector(const vec3d& inVelocity)
+    {
+
+    }
+
+    /**
+    *   Moves the entity ignoring on it's local orientation, ignoring
+    *   mass and friction
+    **/
+    void Entity::addGlobalVelocityVector(const vec3d& inVelocity)
+    {
+
     }
 
     void Entity::impact(const vec3d& inMomentum)

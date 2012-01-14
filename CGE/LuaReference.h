@@ -20,6 +20,7 @@ namespace CGE
             void unset();
             void set(lua_State* inState);
             bool get() const;
+            void call() const;
 
         protected:
         private:

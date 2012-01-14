@@ -1,4 +1,5 @@
 #include "Widget.h"
+#include <cstring>
 
 namespace CGE
 {
@@ -6,79 +7,35 @@ namespace CGE
         mRadiusY(0.0f), mEnabled(true), mCanHaveFocus(inCanHaveFocus),
         mVisible(true)
     {
+        memset(mCCallbacks, 0, sizeof(mCCallbacks));
     }
 
     Widget::~Widget()
     {
     }
 
-    void Widget::onMouseIn(bool inIsClickCandidate)
+    void Widget::setCallback(Event inEvent, const LuaReference& inCallback)
     {
-        mOnMouseIn.dispatch(this);
+        if (inEvent != NumEvents) mCallbacks[inEvent] = inCallback;
     }
 
-    void Widget::onMouseOut()
+    void Widget::setCallback(Event inEvent, Callback inCallback, void* inData)
     {
-        mOnMouseOut.dispatch(this);
+        if (inEvent != NumEvents)
+        {
+            mCCallbacks[inEvent].callback = inCallback;
+            mCCallbacks[inEvent].data = inData;
+        }
     }
 
-    void Widget::onMouseDown()
+    void Widget::onEvent(Event inEvent, bool inIsClickCandidate)
     {
-        mOnMouseDown.dispatch(this);
-    }
+        if (inEvent != NumEvents)
+        {
+            mCallbacks[inEvent].call();
 
-    void Widget::onMouseUp()
-    {
-        mOnMouseUp.dispatch(this);
-    }
-
-    void Widget::onClick()
-    {
-        mOnClick.dispatch(this);
-    }
-
-    void Widget::onFocus()
-    {
-        mOnFocus.dispatch(this);
-    }
-
-    void Widget::onBlur()
-    {
-        mOnBlur.dispatch(this);
-    }
-
-    void Widget::setMouseInListener(Listener inListener, void* inData)
-    {
-        mOnMouseIn.configure(inListener, inData);
-    }
-
-    void Widget::setMouseOutListener(Listener inListener, void* inData)
-    {
-        mOnMouseOut.configure(inListener, inData);
-    }
-
-    void Widget::setMouseDownListener(Listener inListener, void* inData)
-    {
-        mOnMouseDown.configure(inListener, inData);
-    }
-
-    void Widget::setMouseUpListener(Listener inListener, void* inData)
-    {
-        mOnMouseUp.configure(inListener, inData);
-    }
-
-    void Widget::setClickListener(Listener inListener, void* inData)
-    {
-        mOnClick.configure(inListener, inData);
-    }
-
-    void Widget::setFocusListener(Listener inListener, void* inData)
-    {
-        mOnFocus.configure(inListener, inData);
-    }
-
-    void Widget::setBlurListener(Listener inListener, void* inData)
-    {
-        mOnBlur.configure(inListener, inData);
+            Listener& l = mCCallbacks[inEvent];
+            if (l.callback) l.callback(this, l.data);
+        }
     }
 }

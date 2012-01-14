@@ -69,28 +69,37 @@ namespace CGE
         mVBO.display(GL_TRIANGLE_FAN, mFirst, 4);
     }
 
-    void Button::onMouseIn(bool inIsClickCandidate)
+    void Button::onEvent(Widget::Event inEvent, bool inIsClickCandidate)
     {
-        Widget::onMouseIn(inIsClickCandidate);
-        mFirst = isEnabled() ? (inIsClickCandidate ? 8 : 4) : 12;
-    }
+        Widget::onEvent(inEvent, inIsClickCandidate);
 
-    void Button::onMouseOut()
-    {
-        Widget::onMouseOut();
-        mFirst = isEnabled() ? 0 : 12;
-    }
+        switch (inEvent)
+        {
+            case Widget::MouseIn:
+            {
+                mFirst = isEnabled() ? (inIsClickCandidate ? 8 : 4) : 12;
+                break;
+            }
 
-    void Button::onMouseDown()
-    {
-        Widget::onMouseDown();
-        mFirst = isEnabled() ? 8 : 12;
-    }
+            case Widget::MouseOut:
+            {
+                mFirst = isEnabled() ? 0 : 12;
+                break;
+            }
 
-    void Button::onMouseUp()
-    {
-        Widget::onMouseUp();
-        mFirst = isEnabled() ? 4 : 12;
-    }
+            case Widget::MouseDown:
+            {
+                mFirst = isEnabled() ? 8 : 12;
+                break;
+            }
 
+            case Widget::MouseUp:
+            {
+                mFirst = isEnabled() ? 4 : 12;
+                break;
+            }
+
+            default: {}
+        }
+    }
 }

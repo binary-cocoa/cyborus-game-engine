@@ -124,8 +124,6 @@
 		<Unit filename="../CGE/Tools.h" />
 		<Unit filename="../CGE/UI/Button.cpp" />
 		<Unit filename="../CGE/UI/Button.h" />
-		<Unit filename="../CGE/UI/EventListener.cpp" />
-		<Unit filename="../CGE/UI/EventListener.h" />
 		<Unit filename="../CGE/UI/Label.cpp" />
 		<Unit filename="../CGE/UI/Label.h" />
 		<Unit filename="../CGE/UI/TextBox.cpp" />

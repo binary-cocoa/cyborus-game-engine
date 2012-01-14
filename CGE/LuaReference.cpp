@@ -22,6 +22,7 @@ namespace CGE
 
     LuaReference& LuaReference::operator=(const LuaReference& inLuaReference)
     {
+        unset();
         copyFrom(inLuaReference);
         return *this;
     }
@@ -33,12 +34,6 @@ namespace CGE
 
         mState = inState;
         mReference = luaL_ref(mState, LUA_REGISTRYINDEX);
-
-        if (mReference == LUA_REFNIL)
-        {
-            mReference = LUA_NOREF;
-            mState = NULL;
-        }
     }
 
     // Returns whether this LuaReference is set. This prevents having to do
@@ -53,6 +48,11 @@ namespace CGE
         }
 
         return false;
+    }
+
+    void LuaReference::call() const
+    {
+        if (get()) lua_call(mState, 1, 0);
     }
 
     void LuaReference::unset()

@@ -1,15 +1,25 @@
 #ifndef WIDGET_H
 #define WIDGET_H
 
-#include "EventListener.h"
 #include "../SceneGraphNode.h"
-#include <cstring>
+#include "../LuaReference.h"
 
 namespace CGE
 {
     class Widget : public SceneGraphNode
     {
         public:
+            typedef void (*Callback)(Widget*, void*);
+
+            struct Listener
+            {
+                Callback callback;
+                void* data;
+            };
+
+            enum Event { MouseIn, MouseOut, MouseDown, MouseUp, MouseClick,
+                Focus, Blur, NumEvents };
+
             Widget(bool inCanHaveFocus = true);
             virtual ~Widget();
 
@@ -48,21 +58,10 @@ namespace CGE
                     && inY <= mY + mRadiusY;
             }
 
-            virtual void onMouseIn(bool inIsClickCandidate);
-            virtual void onMouseOut();
-            virtual void onMouseDown();
-            virtual void onMouseUp();
-            virtual void onClick();
-            virtual void onFocus();
-            virtual void onBlur();
-
-            void setMouseInListener(Listener inListener, void* inData = NULL);
-            void setMouseOutListener(Listener inListener, void* inData = NULL);
-            void setMouseDownListener(Listener inListener, void* inData = NULL);
-            void setMouseUpListener(Listener inListener, void* inData = NULL);
-            void setClickListener(Listener inListener, void* inData = NULL);
-            void setFocusListener(Listener inListener, void* inData = NULL);
-            void setBlurListener(Listener inListener, void* inData = NULL);
+            virtual void onEvent(Event inEvent, bool inIsClickCandidate);
+            void setCallback(Event inEvent, const LuaReference& inCallback);
+            void setCallback(Event inEvent, Callback inCallback,
+                void* inData = NULL);
 
         protected:
             float mX;
@@ -74,13 +73,10 @@ namespace CGE
             bool mEnabled;
             bool mCanHaveFocus;
             bool mVisible;
-            EventListener mOnMouseIn;
-            EventListener mOnMouseOut;
-            EventListener mOnMouseDown;
-            EventListener mOnMouseUp;
-            EventListener mOnClick;
-            EventListener mOnFocus;
-            EventListener mOnBlur;
+
+            LuaReference mCallbacks[NumEvents];
+            Listener mCCallbacks[NumEvents];
+
     };
 }
 

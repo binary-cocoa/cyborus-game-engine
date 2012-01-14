@@ -125,7 +125,7 @@ namespace CGE
 
         if (mMouseOverWidget && !mMouseOverWidget->contains(mMouseX, mMouseY))
         {
-            mMouseOverWidget->onMouseOut();
+            mMouseOverWidget->onEvent(Widget::MouseOut, false);
             mMouseOverWidget = NULL;
         }
 
@@ -135,9 +135,15 @@ namespace CGE
             Widget* w = *i;
             if (w != mMouseOverWidget && w->contains(mMouseX, mMouseY))
             {
-                if (mMouseOverWidget) mMouseOverWidget->onMouseOut();
+                bool isClickCandidate = w == mClickCandidate;
 
-                w->onMouseIn(w == mClickCandidate);
+                if (mMouseOverWidget)
+                {
+                    mMouseOverWidget->onEvent(Widget::MouseOut,
+                        isClickCandidate);
+                }
+
+                w->onEvent(Widget::MouseIn, isClickCandidate);
                 mMouseOverWidget = w;
             }
         }
@@ -147,7 +153,7 @@ namespace CGE
     {
         if (mMouseOverWidget)
         {
-            mMouseOverWidget->onMouseDown();
+            mMouseOverWidget->onEvent(Widget::MouseDown, true);
             mClickCandidate = mMouseOverWidget;
         }
     }
@@ -156,13 +162,12 @@ namespace CGE
     {
         if (mMouseOverWidget)
         {
-            mMouseOverWidget->onMouseUp();
+            bool isClickCandidate = mMouseOverWidget == mClickCandidate;
 
-            if (mMouseOverWidget == mClickCandidate
-                && mMouseOverWidget->isEnabled())
-            {
-                mClickCandidate->onClick();
-            }
+            mMouseOverWidget->onEvent(Widget::MouseUp, isClickCandidate);
+
+            if (isClickCandidate && mMouseOverWidget->isEnabled())
+                mClickCandidate->onEvent(Widget::MouseClick, true);
         }
 
         mClickCandidate = NULL;

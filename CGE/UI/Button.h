@@ -18,10 +18,8 @@ namespace CGE
 
             virtual void display();
 
-            virtual void onMouseIn(bool inIsClickCandidate);
-            virtual void onMouseOut();
-            virtual void onMouseDown();
-            virtual void onMouseUp();
+            virtual void onEvent(Widget::Event inEvent,
+                bool inIsClickCandidate);
 
         protected:
         private:

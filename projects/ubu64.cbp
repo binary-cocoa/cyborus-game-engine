@@ -54,6 +54,7 @@
 		<Unit filename="../CGE/Graphics.h" />
 		<Unit filename="../CGE/Image.cpp" />
 		<Unit filename="../CGE/Image.h" />
+		<Unit filename="../CGE/LuaIndexedResource.h" />
 		<Unit filename="../CGE/LuaMachine.cpp" />
 		<Unit filename="../CGE/LuaMachine.h" />
 		<Unit filename="../CGE/LuaReference.cpp" />

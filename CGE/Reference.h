@@ -11,25 +11,34 @@ namespace CGE
         class Container
         {
             public:
-                Container(T* inPointer) : mPointer(inPointer), mCount(1)
+                Container(T* inPointer = NULL) : mPointer(inPointer), mCount(1)
                 {
                 }
 
-                inline void acquire() { ++mCount; }
-                inline void release() { if (!--mCount) delete this; }
+                inline ~Container() { delete mPointer; }
+
+                inline void acquire()
+                {
+                    if (mPointer) ++mCount;
+                }
+
+                inline void release()
+                {
+                    if (mPointer && !--mCount) delete this;
+                }
 
                 inline T* pointer() { return mPointer; }
                 inline const T* pointer () const { return mPointer; }
 
             private:
-                inline ~Container() { delete mPointer; }
-
                 T* mPointer;
                 size_t mCount;
         };
 
+        static Container NullReference;
+
         public:
-            Reference(T* inPointer = NULL) : mContainer(NULL)
+            Reference(T* inPointer = NULL) : mContainer(&NullReference)
             {
                 if (inPointer) mContainer = new Container(inPointer);
             }
@@ -37,34 +46,32 @@ namespace CGE
             Reference(const Reference& inReference)
             {
                 mContainer = inReference.mContainer;
-                if (mContainer) mContainer->acquire();
+                mContainer->acquire();
             }
 
             inline ~Reference()
             {
-                if (mContainer) mContainer->release();
+                mContainer->release();
             }
-
-            inline bool isNull() { return !mContainer; }
 
             inline operator T*()
             {
-                return mContainer ? mContainer->pointer() : NULL;
+                return mContainer->pointer();
             }
 
             inline operator const T*() const
             {
-                return mContainer ? mContainer->pointer() : NULL;
+                return mContainer->pointer();
             }
 
             inline T* operator->()
             {
-                return mContainer ? mContainer->pointer() : NULL;
+                return mContainer->pointer();
             }
 
             inline const T* operator->() const
             {
-                return mContainer ? mContainer->pointer() : NULL;
+                return mContainer->pointer();
             }
 
             inline T& operator*() { return *mContainer->pointer(); }
@@ -72,45 +79,50 @@ namespace CGE
 
             Reference& operator=(T* inPointer)
             {
-                if (mContainer) mContainer->release();
-                mContainer = inPointer ? new Container(inPointer) : NULL;
+                mContainer->release();
+
+                if (inPointer)
+                    mContainer = new Container(inPointer);
+                else
+                    mContainer = &NullReference;
+
                 return *this;
             }
 
             Reference& operator=(const Reference& inReference)
             {
-                if (mContainer) mContainer->release();
+                mContainer->release();
                 mContainer = inReference.mContainer;
-                if (mContainer) mContainer->acquire();
+                mContainer->acquire();
                 return *this;
             }
 
             inline bool operator==(const Reference& inReference) const
             {
-                return this == &inReference
-                    || mContainer == inReference.mContainer;
+                return mContainer == inReference.mContainer;
             }
 
             inline bool operator!=(const Reference& inReference) const
             {
-                return this != &inReference
-                    && mContainer != inReference.mContainer;
+                return mContainer != inReference.mContainer;
             }
 
             inline bool operator==(const T* inPointer) const
             {
-                return (!mContainer && !inPointer)
-                    || (mContainer && mContainer->pointer() == inPointer);
+                return mContainer->pointer() == inPointer;
             }
 
             inline bool operator!=(const T* inPointer) const
             {
-                return !operator==(inPointer);
+                return mContainer->pointer() != inPointer;
             }
 
         private:
             Container* mContainer;
     };
+
+    template<class T>
+    typename Reference<T>::Container Reference<T>::NullReference;
 }
 
 #endif

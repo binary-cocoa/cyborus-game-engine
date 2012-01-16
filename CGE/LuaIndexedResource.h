@@ -98,20 +98,18 @@ namespace CGE
     template<class T>
     T LuaIndexedResource<T>::next()
     {
-        T outResource;
-
         for (size_t i = mIterator; i < mResources.size(); ++i)
         {
-            outResource = mResources[i];
+            T outResource = mResources[i];
 
             if (outResource != NULL)
             {
                 mIterator = i + 1;
-                break;
+                return outResource;
             }
         }
 
-        return outResource;
+        return NULL;
     }
 }
 

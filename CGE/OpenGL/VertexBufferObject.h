@@ -23,6 +23,10 @@ namespace CGE
             void enableVAA(GLuint inIndex);
             void disableVAA();
 
+            void vertexPointer();
+            void texCoordPointer();
+            void disableClientState();
+
         protected:
             GLuint mHandle;
             GLuint mIndex;
@@ -32,6 +36,7 @@ namespace CGE
             GLuint mTypeSize;
             GLuint mValuesPerUnit;
             GLuint mSize;
+            GLenum mClientState;
     };
 }
 

@@ -15,6 +15,7 @@ namespace CGE
             Image(const Image& inImage);
             ~Image();
 
+            inline operator bool() const { return isValid(); }
             inline bool isValid() const { return !!mData; }
             void powersOfTwoRectangleFrom(const Image& inImage);
             void loadFile(const char* inFile);

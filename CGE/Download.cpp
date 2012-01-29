@@ -17,7 +17,10 @@ namespace CGE
         double inNowDownloaded, double inTotalToUpload, double inNowUploaded)
     {
         Download* d = static_cast<Download*>(inObject);
-        d->mProgress = inNowDownloaded / inTotalToDownload;
+
+        if (inNowDownloaded >= 0.0 && inTotalToDownload > 0.0)
+            d->mProgress = inNowDownloaded / inTotalToDownload;
+
         return d->stopRequested();
     }
 

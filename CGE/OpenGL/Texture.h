@@ -14,7 +14,7 @@ namespace CGE
             inline void bind() const { glBindTexture(mTarget, mHandle); }
 
         protected:
-            void processParams(const GLenum inParams[]);
+            void processParams(const GLenum* inParams);
 
             GLenum mTarget;
 

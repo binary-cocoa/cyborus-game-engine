@@ -15,22 +15,39 @@ namespace CGE
     {
     }
 
-    void Texture2D::loadImage(const Image& inImage)
+    void Texture2D::loadImage(const Image& inImage, GLenum inEdgeMode,
+        bool inEnableMipmapping)
     {
-        const GLenum params1[] = {
-            GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE,
-            GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE,
-            GL_TEXTURE_MAG_FILTER, GL_LINEAR,
-            0 };
-
-        const GLenum params2[] = {
-            GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR,
-            0 };
-
         bind();
-        processParams(params1);
-        inImage.loadIntoTexture(mTarget);
-        glGenerateMipmap(mTarget);
-        processParams(params2);
+
+        if (inEnableMipmapping)
+        {
+            const GLenum params1[] = {
+                GL_TEXTURE_WRAP_S, inEdgeMode,
+                GL_TEXTURE_WRAP_T, inEdgeMode,
+                GL_TEXTURE_MAG_FILTER, GL_LINEAR,
+                0 };
+
+            const GLenum params2[] = {
+                GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR,
+                0 };
+
+            processParams(params1);
+            inImage.loadIntoTexture(mTarget);
+            glGenerateMipmap(mTarget);
+            processParams(params2);
+        }
+        else
+        {
+            const GLenum params[] = {
+                GL_TEXTURE_WRAP_S, inEdgeMode,
+                GL_TEXTURE_WRAP_T, inEdgeMode,
+                GL_TEXTURE_MAG_FILTER, GL_LINEAR,
+                GL_TEXTURE_MIN_FILTER, GL_LINEAR,
+                0 };
+
+            processParams(params);
+            inImage.loadIntoTexture(mTarget);
+        }
     }
 }

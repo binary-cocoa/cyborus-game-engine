@@ -5,7 +5,7 @@ namespace CGE
 {
     VertexBufferObject::VertexBufferObject(GLenum inTarget, GLenum inType,
         GLenum inUsage) : mIndex(0), mTarget(inTarget), mType(inType),
-        mUsage(inUsage), mValuesPerUnit(1), mSize(0)
+        mUsage(inUsage), mValuesPerUnit(1), mSize(0), mClientState(0)
     {
         glGenBuffers(1, &mHandle);
 
@@ -68,5 +68,33 @@ namespace CGE
     {
         glDisableVertexAttribArray(mIndex);
         mIndex = 0;
+    }
+
+    void VertexBufferObject::vertexPointer()
+    {
+        assert(mClientState == 0);
+
+        mClientState = GL_VERTEX_ARRAY;
+        glEnableClientState(mClientState);
+        bind();
+        glVertexPointer(mValuesPerUnit, mType, 0, 0);
+    }
+
+    void VertexBufferObject::texCoordPointer()
+    {
+        assert(mClientState == 0);
+
+        mClientState = GL_TEXTURE_COORD_ARRAY;
+        glEnableClientState(mClientState);
+        bind();
+        glTexCoordPointer(mValuesPerUnit, mType, 0, 0);
+    }
+
+    void VertexBufferObject::disableClientState()
+    {
+        assert(mClientState != 0);
+
+        glDisableClientState(mClientState);
+        mClientState = 0;
     }
 }

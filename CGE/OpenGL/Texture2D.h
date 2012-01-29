@@ -13,7 +13,9 @@ namespace CGE
             Texture2D(const Image& inImage);
             virtual ~Texture2D();
 
-            void loadImage(const Image& inImage);
+            void loadImage(const Image& inImage,
+                GLenum inEdgeMode = GL_CLAMP_TO_EDGE,
+                bool inEnableMipmapping = true);
 
         private:
             Texture2D(const Texture2D& inTexture) : Texture(0)

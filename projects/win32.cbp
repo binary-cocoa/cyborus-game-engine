@@ -61,6 +61,10 @@
 		<Unit filename="..\CGE\ManagedModule.h" />
 		<Unit filename="..\CGE\Matrix.h" />
 		<Unit filename="..\CGE\Matrix4x4.h" />
+		<Unit filename="..\CGE\Memory.cpp">
+			<Option weight="0" />
+		</Unit>
+		<Unit filename="..\CGE\Memory.h" />
 		<Unit filename="..\CGE\Model.cpp" />
 		<Unit filename="..\CGE\Model.h" />
 		<Unit filename="..\CGE\ModelFromFile.cpp" />

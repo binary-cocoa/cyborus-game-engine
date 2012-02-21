@@ -31,7 +31,8 @@ namespace CGE
 
         fseek(f, 0, SEEK_SET);
 
-        char* outBuffer = static_cast<char*>(calloc(length + 1, sizeof(char)));
+        //char* outBuffer = static_cast<char*>(calloc(length + 1, sizeof(char)));
+        char* outBuffer = new char[length + 1];
 
         if (!outBuffer) return NULL;
 

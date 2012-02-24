@@ -13,8 +13,6 @@ namespace CGE
             SceneGraphNode();
             virtual ~SceneGraphNode();
 
-            virtual void display();
-
             void addChildNode(SceneGraphNode* inNode);
             void removeChildNode(SceneGraphNode* inNode);
             void removeAllChildren();

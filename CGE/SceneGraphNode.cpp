@@ -13,10 +13,6 @@ namespace CGE
         removeAllChildren();
     }
 
-    void SceneGraphNode::display()
-    {
-    }
-
     void SceneGraphNode::addChildNode(SceneGraphNode* inNode)
     {
         assert(inNode != NULL);

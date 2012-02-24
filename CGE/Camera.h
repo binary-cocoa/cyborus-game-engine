@@ -3,6 +3,9 @@
 
 #include "Matrix4x4.h"
 #include "Vectors.h"
+#include "Tools.h"
+
+#include <vector>
 
 namespace CGE
 {
@@ -42,7 +45,11 @@ namespace CGE
             void unfollow(const float* inTarget,
                 bool inCopyTargetPosition = true);
 
+            void shakeCamera(float inMagnitude, float inSpeed, float inRateOfDecay);
+
         private:
+            void calculateShakePosition();
+
             mat4f mTranslateMatrix;
             mat4f mAngleMatrix;
             vec3f mPosition;
@@ -50,6 +57,11 @@ namespace CGE
             float mRotation;
             float mAngle;
             const float* mFollow;
+            float mShakeCurrentPosition;
+            std::vector<float> mShakeMagnitudes;
+            std::vector<float> mShakeSpeeds;
+            float mShakeCurrentDegrees;
+            std::vector<float> mShakeRatesOfDecay;
     };
 }
 

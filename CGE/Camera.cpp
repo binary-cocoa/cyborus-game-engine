@@ -1,10 +1,12 @@
 #include "Camera.h"
 #include "Tools.h"
 
+using namespace std;
+
 namespace CGE
 {
     Camera::Camera() : mDistance(0.0f), mRotation(0.0f), mAngle(0.0f),
-        mFollow(NULL)
+        mFollow(NULL), mShakeCurrentPosition(0.0f), mShakeCurrentDegrees(0.0f)
     {
     }
 
@@ -21,17 +23,68 @@ namespace CGE
 
         mTranslateMatrix.loadIdentity();
 
+        calculateShakePosition();
+
         if (mFollow)
         {
-            mTranslateMatrix.translate(-mFollow[0], -mFollow[1],
+            mTranslateMatrix.translate(-mFollow[0] + mShakeCurrentPosition, -mFollow[1],
                 -mFollow[2]);
         }
         else
         {
-            mTranslateMatrix.translate(-mPosition[0], -mPosition[1],
+            mTranslateMatrix.translate(-mPosition[0] + mShakeCurrentPosition, -mPosition[1],
                 -mPosition[2]);
         }
 
+    }
+
+    void Camera::shakeCamera(float inMagnitude, float inSpeed, float inRateOfDecay)
+    {
+        mShakeMagnitudes.push_back(inMagnitude);
+        mShakeSpeeds.push_back(inSpeed);
+        mShakeRatesOfDecay.push_back(inRateOfDecay);
+    }
+
+    void Camera::calculateShakePosition()
+    {
+        if (mShakeMagnitudes.size() > 0)
+        {
+            float currentMagnitude = 0.0f;
+
+            //using iterators to run through the lists makes it easier to remove elements
+            vector<float>::iterator magnitude = mShakeMagnitudes.begin();
+            vector<float>::iterator speed = mShakeSpeeds.begin();
+            vector<float>::iterator rateOfDecay = mShakeRatesOfDecay.begin();
+
+            while (magnitude != mShakeMagnitudes.end())
+            {
+                currentMagnitude += *magnitude;
+                mShakeCurrentDegrees += *speed;
+                *magnitude -= *rateOfDecay;
+
+                if (*magnitude <= 0.0f)
+                {
+                    magnitude = mShakeMagnitudes.erase(magnitude);
+                    speed = mShakeSpeeds.erase(speed);
+                    rateOfDecay = mShakeRatesOfDecay.erase(rateOfDecay);
+
+
+                }
+                else
+                {
+                    ++magnitude;
+                    ++speed;
+                    ++rateOfDecay;
+                }
+            }
+            mShakeCurrentPosition = sin(TO_RADIANS(mShakeCurrentDegrees)) * currentMagnitude;
+
+            if (mShakeMagnitudes.size() == 0)
+            {
+                mShakeCurrentDegrees = 0.0f;
+                mShakeCurrentPosition = 0.0f;
+            }
+        }
     }
 
     void Camera::setDistance(float inDistance)

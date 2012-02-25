@@ -46,6 +46,7 @@ namespace CGE
                 bool inCopyTargetPosition = true);
 
             void shakeCamera(float inMagnitude, float inSpeed, float inRateOfDecay);
+            void stopCameraShake();
 
         private:
             void calculateShakePosition();
@@ -57,7 +58,8 @@ namespace CGE
             float mRotation;
             float mAngle;
             const float* mFollow;
-            float mShakeCurrentPosition;
+            float mShakeCurrentPositionX;
+            float mShakeCurrentPositionY;
             std::vector<float> mShakeMagnitudes;
             std::vector<float> mShakeSpeeds;
             float mShakeCurrentDegrees;

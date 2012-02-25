@@ -6,7 +6,7 @@ using namespace std;
 namespace CGE
 {
     Camera::Camera() : mDistance(0.0f), mRotation(0.0f), mAngle(0.0f),
-        mFollow(NULL), mShakeCurrentPosition(0.0f), mShakeCurrentDegrees(0.0f)
+        mFollow(NULL), mShakeCurrentPositionX(0.0f), mShakeCurrentPositionY(0.0f), mShakeCurrentDegrees(0.0f)
     {
     }
 
@@ -27,12 +27,12 @@ namespace CGE
 
         if (mFollow)
         {
-            mTranslateMatrix.translate(-mFollow[0] + mShakeCurrentPosition, -mFollow[1],
+            mTranslateMatrix.translate(-mFollow[0] + mShakeCurrentPositionX, -mFollow[1] + mShakeCurrentPositionY,
                 -mFollow[2]);
         }
         else
         {
-            mTranslateMatrix.translate(-mPosition[0] + mShakeCurrentPosition, -mPosition[1],
+            mTranslateMatrix.translate(-mPosition[0] + mShakeCurrentPositionX, -mPosition[1] + mShakeCurrentPositionY,
                 -mPosition[2]);
         }
 
@@ -43,6 +43,19 @@ namespace CGE
         mShakeMagnitudes.push_back(inMagnitude);
         mShakeSpeeds.push_back(inSpeed);
         mShakeRatesOfDecay.push_back(inRateOfDecay);
+    }
+
+    void Camera::stopCameraShake()
+    {
+        vector<float>::iterator rateOfDecay = mShakeRatesOfDecay.begin();
+        vector<float>::iterator magnitude = mShakeMagnitudes.begin();
+
+        while (rateOfDecay != mShakeRatesOfDecay.end())
+        {
+            *rateOfDecay = *magnitude;
+            ++rateOfDecay;
+            ++magnitude;
+        }
     }
 
     void Camera::calculateShakePosition()
@@ -68,7 +81,12 @@ namespace CGE
                     speed = mShakeSpeeds.erase(speed);
                     rateOfDecay = mShakeRatesOfDecay.erase(rateOfDecay);
 
-
+                    if (mShakeMagnitudes.size() == 0)
+                    {
+                        mShakeCurrentDegrees = 0.0f;
+                        mShakeCurrentPositionX = 0.0f;
+                        mShakeCurrentPositionY = 0.0f;
+                    }
                 }
                 else
                 {
@@ -77,13 +95,10 @@ namespace CGE
                     ++rateOfDecay;
                 }
             }
-            mShakeCurrentPosition = sin(TO_RADIANS(mShakeCurrentDegrees)) * currentMagnitude;
-
-            if (mShakeMagnitudes.size() == 0)
-            {
-                mShakeCurrentDegrees = 0.0f;
-                mShakeCurrentPosition = 0.0f;
-            }
+            float radians = TO_RADIANS(mShakeCurrentDegrees);
+            //float sinResult = ;
+            mShakeCurrentPositionX = sin(radians) * currentMagnitude;
+            mShakeCurrentPositionY = sin(radians * 2) * currentMagnitude;
         }
     }
 

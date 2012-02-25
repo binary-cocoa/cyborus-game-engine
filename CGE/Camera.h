@@ -5,7 +5,7 @@
 #include "Vectors.h"
 #include "Tools.h"
 
-#include <vector>
+#include <list>
 
 namespace CGE
 {
@@ -45,7 +45,7 @@ namespace CGE
             void unfollow(const float* inTarget,
                 bool inCopyTargetPosition = true);
 
-            void shakeCamera(float inMagnitude, float inSpeed, float inRateOfDecay);
+            void shakeCamera(double inMagnitude, double inSpeed, double inRateOfDecay);
             void stopCameraShake();
 
         private:
@@ -60,10 +60,10 @@ namespace CGE
             const float* mFollow;
             float mShakeCurrentPositionX;
             float mShakeCurrentPositionY;
-            std::vector<float> mShakeMagnitudes;
-            std::vector<float> mShakeSpeeds;
-            float mShakeCurrentDegrees;
-            std::vector<float> mShakeRatesOfDecay;
+            std::list<double> mShakeMagnitudes;
+            std::list<double> mShakeSpeeds;
+            double mShakeCurrentDegrees;
+            std::list<double> mShakeRatesOfDecay;
     };
 }
 

@@ -38,7 +38,7 @@ namespace CGE
 
     }
 
-    void Camera::shakeCamera(float inMagnitude, float inSpeed, float inRateOfDecay)
+    void Camera::shakeCamera(double inMagnitude, double inSpeed, double inRateOfDecay)
     {
         mShakeMagnitudes.push_back(inMagnitude);
         mShakeSpeeds.push_back(inSpeed);
@@ -47,8 +47,8 @@ namespace CGE
 
     void Camera::stopCameraShake()
     {
-        vector<float>::iterator rateOfDecay = mShakeRatesOfDecay.begin();
-        vector<float>::iterator magnitude = mShakeMagnitudes.begin();
+        list<double>::iterator rateOfDecay = mShakeRatesOfDecay.begin();
+        list<double>::iterator magnitude = mShakeMagnitudes.begin();
 
         while (rateOfDecay != mShakeRatesOfDecay.end())
         {
@@ -62,12 +62,12 @@ namespace CGE
     {
         if (mShakeMagnitudes.size() > 0)
         {
-            float currentMagnitude = 0.0f;
+            double currentMagnitude = 0.0f;
 
             //using iterators to run through the lists makes it easier to remove elements
-            vector<float>::iterator magnitude = mShakeMagnitudes.begin();
-            vector<float>::iterator speed = mShakeSpeeds.begin();
-            vector<float>::iterator rateOfDecay = mShakeRatesOfDecay.begin();
+            list<double>::iterator magnitude = mShakeMagnitudes.begin();
+            list<double>::iterator speed = mShakeSpeeds.begin();
+            list<double>::iterator rateOfDecay = mShakeRatesOfDecay.begin();
 
             while (magnitude != mShakeMagnitudes.end())
             {
@@ -95,10 +95,9 @@ namespace CGE
                     ++rateOfDecay;
                 }
             }
-            float radians = TO_RADIANS(mShakeCurrentDegrees);
-            //float sinResult = ;
-            mShakeCurrentPositionX = sin(radians) * currentMagnitude;
-            mShakeCurrentPositionY = sin(radians * 2) * currentMagnitude;
+            double radians = TO_RADIANS(mShakeCurrentDegrees);
+            mShakeCurrentPositionX = float(sin(radians) * currentMagnitude);
+            mShakeCurrentPositionY = float(sin(radians * 2) * currentMagnitude);
         }
     }
 

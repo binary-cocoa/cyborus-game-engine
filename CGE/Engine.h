@@ -40,6 +40,7 @@ namespace CGE
             Surface mDisplay;
             Surface mWindowIcon;
             SDL_Rect** mModes;
+            Joystick* mJoysticks;
             Settings mSettings;
             bool mFullExitRequested;
 

@@ -87,6 +87,16 @@ namespace CGE
             cleanupAudio();
         }
 
+        int numJoysticks = SDL_NumJoysticks();
+
+        for (int i = 0; i < numJoysticks; ++i)
+        {
+            if (SDL_JoystickOpened(i))
+            {
+                SDL_JoystickClose(mJoysticks[i]);
+            }
+        }
+
         SDLNet_Quit();
         TTF_Quit();
         SDL_Quit();
@@ -241,6 +251,28 @@ namespace CGE
             fout.close();
             exit(1);
         }
+
+        int numJoysticks = SDL_NumJoysticks();
+        mJoysticks = new Joystick[numJoysticks];
+
+        for (int i = 0; i < numJoysticks; ++i)
+        {
+            mJoysticks[i] = SDL_JoystickOpen(i);
+
+            if (mJoysticks[i])
+            {
+                fout << "Opened Joystick " << i << endl;
+                fout << "Name: " << SDL_JoystickName(i) << endl;
+                fout << "Number of Axes: " << SDL_JoystickNumAxes(mJoysticks[i]) << endl;
+                fout << "Number of Buttons: " << SDL_JoystickNumButtons(mJoysticks[i]) << endl;
+                fout << "Number of Balls: " << SDL_JoystickNumBalls(mJoysticks[i]) << endl;
+            }
+            else
+            {
+                fout << "Error: Failed to open Joystick " << i << endl;
+            }
+        }
+
 
 #ifdef __WIN32__
         freopen("CON", "w", stdout);

@@ -97,6 +97,8 @@ namespace CGE
             }
         }
 
+        delete [] mJoysticks;
+
         SDLNet_Quit();
         TTF_Quit();
         SDL_Quit();
@@ -265,6 +267,7 @@ namespace CGE
                 fout << "Name: " << SDL_JoystickName(i) << endl;
                 fout << "Number of Axes: " << SDL_JoystickNumAxes(mJoysticks[i]) << endl;
                 fout << "Number of Buttons: " << SDL_JoystickNumButtons(mJoysticks[i]) << endl;
+                fout << "Number of Hats: " << SDL_JoystickNumHats(mJoysticks[i]) << endl;
                 fout << "Number of Balls: " << SDL_JoystickNumBalls(mJoysticks[i]) << endl;
             }
             else

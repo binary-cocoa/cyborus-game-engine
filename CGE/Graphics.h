@@ -6,7 +6,6 @@ typedef GLint GLuniform;
 
 #include <SDL.h>
 typedef SDL_Surface* Surface;
-typedef SDL_Joystick* Joystick;
 
 #include "Matrix4x4.h"
 #include "Vectors.h"

@@ -3,6 +3,7 @@
 
 #include "Graphics.h"
 #include "ManagedModule.h"
+#include "JoysticksInterface.h"
 
 #include <iostream>
 
@@ -40,9 +41,9 @@ namespace CGE
             Surface mDisplay;
             Surface mWindowIcon;
             SDL_Rect** mModes;
-            Joystick* mJoysticks;
             Settings mSettings;
             bool mFullExitRequested;
+            JoysticksInterface* mJoysticksInterface;
 
             static void logOpenGL(std::ostream& inStream);
             static void prepareFiles();

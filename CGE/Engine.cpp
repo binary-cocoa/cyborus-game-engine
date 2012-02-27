@@ -68,7 +68,8 @@ namespace CGE
     }
 
     Engine::Engine(const Settings& inSettings) : mWindowIcon(NULL),
-        mSettings(inSettings), mFullExitRequested(false)
+        mSettings(inSettings), mFullExitRequested(false),
+        mJoysticksInterface(NULL)
     {
         initialize();
     }
@@ -82,22 +83,12 @@ namespace CGE
             fout.close();
         }
 
+        delete mJoysticksInterface;
+
         if (mSettings.sound)
         {
             cleanupAudio();
         }
-
-        int numJoysticks = SDL_NumJoysticks();
-
-        for (int i = 0; i < numJoysticks; ++i)
-        {
-            if (SDL_JoystickOpened(i))
-            {
-                SDL_JoystickClose(mJoysticks[i]);
-            }
-        }
-
-        delete [] mJoysticks;
 
         SDLNet_Quit();
         TTF_Quit();
@@ -254,29 +245,6 @@ namespace CGE
             exit(1);
         }
 
-        int numJoysticks = SDL_NumJoysticks();
-        mJoysticks = new Joystick[numJoysticks];
-
-        for (int i = 0; i < numJoysticks; ++i)
-        {
-            mJoysticks[i] = SDL_JoystickOpen(i);
-
-            if (mJoysticks[i])
-            {
-                fout << "Opened Joystick " << i << endl;
-                fout << "Name: " << SDL_JoystickName(i) << endl;
-                fout << "Number of Axes: " << SDL_JoystickNumAxes(mJoysticks[i]) << endl;
-                fout << "Number of Buttons: " << SDL_JoystickNumButtons(mJoysticks[i]) << endl;
-                fout << "Number of Hats: " << SDL_JoystickNumHats(mJoysticks[i]) << endl;
-                fout << "Number of Balls: " << SDL_JoystickNumBalls(mJoysticks[i]) << endl;
-            }
-            else
-            {
-                fout << "Error: Failed to open Joystick " << i << endl;
-            }
-        }
-
-
 #ifdef __WIN32__
         freopen("CON", "w", stdout);
         freopen("CON", "w", stderr);
@@ -287,6 +255,9 @@ namespace CGE
             setupAudio(mConfig.get("audio sources", 32));
         }
 
+        mJoysticksInterface = new JoysticksInterface;
+        if (mJoysticksInterface->numJoysticks() > 0)
+            fout << "Joysticks Detected:\n" << *mJoysticksInterface << '\n';
 
         // get available full screen modes
         mModes = SDL_ListModes(NULL, SDL_FULLSCREEN);

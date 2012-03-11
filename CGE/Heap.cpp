@@ -5,6 +5,7 @@
 namespace CGE
 {
     Heap* Heap::mFirstHeap = NULL;
+    Heap Heap::TotalHeap;
 
     Heap::Heap(const char* inName) : mName(inName), mBlocks(0), mBytes(0),
         mPeakBlocks(0), mPeakBytes(0), mSmallestBlock(0), mLargestBlock(0)
@@ -12,6 +13,11 @@ namespace CGE
         assert(mName && *mName);
         mNextHeap = mFirstHeap;
         mFirstHeap = this;
+    }
+
+    Heap::Heap() : mName("Total"), mBlocks(0), mBytes(0),
+        mPeakBlocks(0), mPeakBytes(0), mSmallestBlock(0), mLargestBlock(0)
+    {
     }
 
     Heap::~Heap()
@@ -31,6 +37,8 @@ namespace CGE
 
         if (mSmallestBlock == 0 || inBytes < mSmallestBlock)
             mSmallestBlock = inBytes;
+
+        if (this != &TotalHeap) TotalHeap.allocate(inBytes);
     }
 
     void Heap::release(size_t inBytes)
@@ -41,19 +49,23 @@ namespace CGE
 
         --mBlocks;
         mBytes -= inBytes;
+
+        if (this != &TotalHeap) TotalHeap.release(inBytes);
     }
 
     static void showBar()
     {
         for (size_t i = 0; i < 70; ++i)
             std::cout << '-';
+
+        std::cout << '\n';
     }
 
     void Heap::dump()
     {
         showBar();
 
-        std::cout << '\n'
+        std::cout
             << std::setw(10) << "Name"
             << std::setw(10) << "Blocks"
             << std::setw(10) << "(Peak)"
@@ -65,8 +77,6 @@ namespace CGE
 
         showBar();
 
-        std::cout << '\n';
-
         for (Heap* h = mFirstHeap; h; h = h->mNextHeap)
         {
             std::cout << *h << '\n';
@@ -74,7 +84,9 @@ namespace CGE
 
         showBar();
 
-        std::cout << "\n\n";
+        std::cout << TotalHeap << '\n';
+
+        showBar();
     }
 
     std::ostream& operator<<(std::ostream& inStream, const Heap& inHeap)

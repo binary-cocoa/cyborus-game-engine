@@ -22,6 +22,8 @@ namespace CGE
 
         protected:
         private:
+            Heap();
+
             const char* const mName;
 
             size_t mBlocks;
@@ -34,6 +36,7 @@ namespace CGE
             Heap* mNextHeap;
 
             static Heap* mFirstHeap;
+            static Heap TotalHeap;
     };
 }
 

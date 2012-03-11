@@ -6,6 +6,7 @@
 
 namespace CGE
 {
+    void* allocate(size_t inSize);
     void* allocate(size_t inSize, Heap& inHeap);
     void* reallocate(void* inMemory, size_t inSize, Heap& inHeap);
     void release(void* inMemory);

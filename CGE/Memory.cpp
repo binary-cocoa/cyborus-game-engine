@@ -20,6 +20,11 @@ namespace CGE
 
     static Header* gFirstHeader = NULL;
 
+    void* allocate(size_t inSize)
+    {
+        return allocate(inSize, GeneralHeap);
+    }
+
     void* allocate(size_t inSize, Heap& inHeap)
     {
         size_t total = sizeof(Header) + inSize;

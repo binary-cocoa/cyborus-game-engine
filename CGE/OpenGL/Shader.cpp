@@ -1,7 +1,7 @@
 #include "Shader.h"
 #include "../Exception.h"
-
 #include "../Tools.h"
+#include "../Memory.h"
 
 namespace CGE
 {
@@ -37,7 +37,7 @@ namespace CGE
         loadFromBuffer(source);
         mFile = temp;
 
-        delete [] source;
+        release(source);
     }
 
     void Shader::loadFromBuffer(const char* inBuffer)

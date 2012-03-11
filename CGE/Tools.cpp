@@ -1,4 +1,5 @@
 #include "Tools.h"
+#include "Memory.h"
 
 #include <cstdlib>
 #include <cstdio>
@@ -27,26 +28,32 @@ namespace CGE
         if (!f) return NULL;
 
         fseek(f, 0, SEEK_END);
+
         size_t length = ftell(f);
 
         fseek(f, 0, SEEK_SET);
 
-        //char* outBuffer = static_cast<char*>(calloc(length + 1, sizeof(char)));
-        char* outBuffer = new char[length + 1];
+        char* outBuffer = NULL;
 
-        if (!outBuffer) return NULL;
-
-        size_t r = fread(outBuffer, sizeof(char), length, f);
-
-        if (!r)
+        if (length > 0)
         {
-            free(outBuffer);
-            return NULL;
+            outBuffer = (char*)allocate(length + 1);
+
+            if (outBuffer)
+            {
+                size_t r = fread(outBuffer, sizeof(char), length, f);
+
+                if (!r)
+                {
+                    release(outBuffer);
+                    return NULL;
+                }
+
+                outBuffer[length] = '\0';
+            }
         }
 
-        outBuffer[length] = '\0';
         fclose(f);
-
         return outBuffer;
     }
 

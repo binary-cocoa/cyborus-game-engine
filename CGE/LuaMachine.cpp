@@ -10,6 +10,7 @@ namespace CGE
         size_t inOldSize, size_t inNewSize)
     {
         (void)inOldSize;
+        (void)inUserData;
 
         void* outBlock = NULL;
 

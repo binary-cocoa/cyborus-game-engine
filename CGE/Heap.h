@@ -28,6 +28,7 @@ namespace CGE
             size_t mBytes;
             size_t mPeakBlocks;
             size_t mPeakBytes;
+            size_t mSmallestBlock;
             size_t mLargestBlock;
 
             Heap* mNextHeap;

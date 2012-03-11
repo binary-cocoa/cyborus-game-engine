@@ -3,6 +3,7 @@
 
 #include "../SceneGraphNode.h"
 #include "../LuaReference.h"
+#include "../Memory.h"
 
 namespace CGE
 {
@@ -62,6 +63,9 @@ namespace CGE
             void setCallback(Event inEvent, const LuaReference& inCallback);
             void setCallback(Event inEvent, Callback inCallback,
                 void* inData = NULL);
+
+            static void* operator new(size_t inSize);
+            static void operator delete(void* inMemory);
 
         protected:
             float mX;

@@ -7,7 +7,7 @@ namespace CGE
     Heap* Heap::mFirstHeap = NULL;
 
     Heap::Heap(const char* inName) : mName(inName), mBlocks(0), mBytes(0),
-        mPeakBlocks(0), mPeakBytes(0), mLargestBlock(0)
+        mPeakBlocks(0), mPeakBytes(0), mSmallestBlock(0), mLargestBlock(0)
     {
         assert(mName && *mName);
         mNextHeap = mFirstHeap;
@@ -28,6 +28,9 @@ namespace CGE
         if (mBlocks > mPeakBlocks) mPeakBlocks = mBlocks;
         if (mBytes > mPeakBytes) mPeakBytes = mBytes;
         if (inBytes > mLargestBlock) mLargestBlock = inBytes;
+
+        if (mSmallestBlock == 0 || inBytes < mSmallestBlock)
+            mSmallestBlock = inBytes;
     }
 
     void Heap::release(size_t inBytes)
@@ -40,18 +43,27 @@ namespace CGE
         mBytes -= inBytes;
     }
 
+    static void showBar()
+    {
+        for (size_t i = 0; i < 70; ++i)
+            std::cout << '-';
+    }
+
     void Heap::dump()
     {
-        std::cout << std::setw(10) << "Name"
+        showBar();
+
+        std::cout << '\n'
+            << std::setw(10) << "Name"
             << std::setw(10) << "Blocks"
             << std::setw(10) << "(Peak)"
             << std::setw(10) << "Bytes"
             << std::setw(10) << "(Peak)"
+            << std::setw(10) << "Smallest"
             << std::setw(10) << "Biggest"
             << '\n';
 
-        for (size_t i = 0; i < 60; ++i)
-            std::cout << '-';
+        showBar();
 
         std::cout << '\n';
 
@@ -60,8 +72,7 @@ namespace CGE
             std::cout << *h << '\n';
         }
 
-        for (size_t i = 0; i < 60; ++i)
-            std::cout << '-';
+        showBar();
 
         std::cout << "\n\n";
     }
@@ -73,6 +84,7 @@ namespace CGE
             << std::setw(10) << inHeap.mPeakBlocks
             << std::setw(10) << inHeap.mBytes
             << std::setw(10) << inHeap.mPeakBytes
+            << std::setw(10) << inHeap.mSmallestBlock
             << std::setw(10) << inHeap.mLargestBlock
             ;
 

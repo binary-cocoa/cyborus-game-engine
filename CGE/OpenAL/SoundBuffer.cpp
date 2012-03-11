@@ -1,5 +1,6 @@
 #include "SoundBuffer.h"
 #include "../Tools.h"
+#include "../Memory.h"
 
 #include <cstdio>
 #include <cstring>
@@ -12,6 +13,8 @@
 
 namespace CGE
 {
+    static Heap AudioHeap("Audio");
+
     SoundBuffer::SoundBuffer(const char* inFile) : mHandle(0)
     {
         // These just silence a few warnings. :P
@@ -91,7 +94,7 @@ namespace CGE
             : AL_FORMAT_STEREO16;
 
         const size_t BufferSize = 4096 * 64;
-        void* chunk = malloc(BufferSize);
+        void* chunk = allocate(BufferSize, AudioHeap);
         char* data = reinterpret_cast<char*>(chunk);
 
         int got = 0;
@@ -109,7 +112,7 @@ namespace CGE
 
         alBufferData(mHandle, format, data, got, vorbisInfo->rate);
 
-        free(chunk);
+        release(chunk);
     }
 
     void SoundBuffer::loadWav(const char* inFile)
@@ -130,7 +133,7 @@ namespace CGE
 
         if (size > 44)
         {
-            char* buffer = new char[size];
+            char* buffer = (char*)allocate(size * sizeof(char), AudioHeap);
             fin.read(buffer, size);
 
             if (!memcmp(buffer, "RIFF", 4)
@@ -202,7 +205,7 @@ namespace CGE
                 std::cerr << "invalid WAV format: missing 'RIFF' header\n";
             }
 
-            delete [] buffer;
+            release(buffer);
         }
         else
         {

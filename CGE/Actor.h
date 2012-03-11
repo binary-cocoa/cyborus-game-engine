@@ -96,6 +96,9 @@ namespace CGE
 
             void removeFromBin();
 
+            static void* operator new(size_t inSize);
+            static void operator delete(void* inMemory);
+
         protected:
             Model* mModel;
 

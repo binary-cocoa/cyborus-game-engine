@@ -1,7 +1,20 @@
 #include "Actor.h"
+#include "Memory.h"
 
 namespace CGE
 {
+    static Heap ActorHeap("Actor");
+
+    void* Actor::operator new(size_t inSize)
+    {
+        return allocate(inSize, ActorHeap);
+    }
+
+    void Actor::operator delete(void* inMemory)
+    {
+        release(inMemory);
+    }
+
     Actor::Actor(Model* inModel) : mModel(inModel), mHead(NULL),
         mNextActor(NULL), mPreviousActor(NULL)
     {

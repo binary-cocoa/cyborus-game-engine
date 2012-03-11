@@ -2,10 +2,13 @@
 #define MEMORY_H
 
 #include <new>
+#include "Heap.h"
 
 namespace CGE
 {
-    void memoryDump();
+    void* allocate(size_t inSize, Heap& inHeap);
+    void* reallocate(void* inMemory, size_t inSize, Heap& inHeap);
+    void release(void* inMemory);
 }
 
 void* operator new(size_t inSize);

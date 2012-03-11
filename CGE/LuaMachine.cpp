@@ -1,8 +1,30 @@
 #include "LuaMachine.h"
+#include "Memory.h"
 #include <iostream>
 
 namespace CGE
 {
+    static Heap LuaHeap("Lua");
+
+    void* LuaMachine::allocateLuaBlock(void* inUserData, void* inPointer,
+        size_t inOldSize, size_t inNewSize)
+    {
+        (void)inOldSize;
+
+        void* outBlock = NULL;
+
+        if (inNewSize > 0)
+        {
+            outBlock = reallocate(inPointer, inNewSize, LuaHeap);
+        }
+        else
+        {
+            release(inPointer);
+        }
+
+        return outBlock;
+    }
+
     LuaMachine::LuaMachine() : mLuaState(NULL)
     {
         reset();
@@ -16,7 +38,7 @@ namespace CGE
     void LuaMachine::reset()
     {
         if (mLuaState) lua_close(mLuaState);
-        mLuaState = luaL_newstate();
+        mLuaState = lua_newstate(allocateLuaBlock, this);
         luaL_openlibs(mLuaState);
     }
 

@@ -6,11 +6,10 @@ namespace CGE
 {
     static Heap LuaHeap("Lua");
 
-    static void* allocateLuaBlock(void* inUserData, void* inPointer,
-        size_t inOriginalSize, size_t inNewSize)
+    void* LuaMachine::allocateLuaBlock(void* inUserData, void* inPointer,
+        size_t inOldSize, size_t inNewSize)
     {
-        (void)inUserData;
-        (void)inOriginalSize;
+        (void)inOldSize;
 
         void* outBlock = NULL;
 
@@ -34,12 +33,14 @@ namespace CGE
     LuaMachine::~LuaMachine()
     {
         lua_close(mLuaState);
+        std::cout << mAllocations << " allocations, "
+            << mReleases << " releases\n";
     }
 
     void LuaMachine::reset()
     {
         if (mLuaState) lua_close(mLuaState);
-        mLuaState = lua_newstate(allocateLuaBlock, NULL);
+        mLuaState = lua_newstate(allocateLuaBlock, this);
         luaL_openlibs(mLuaState);
     }
 

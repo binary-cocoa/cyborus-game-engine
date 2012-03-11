@@ -20,6 +20,9 @@ namespace CGE
             inline lua_State* getState() { return mLuaState; }
 
         private:
+            static void* allocateLuaBlock(void* inUserData, void* inPointer,
+                size_t inOldSize, size_t inNewSize);
+
             void execute();
             void reportErrors();
 

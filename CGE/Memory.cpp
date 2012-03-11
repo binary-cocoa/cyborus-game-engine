@@ -52,6 +52,8 @@ namespace CGE
 
     void* reallocate(void* inMemory, size_t inSize, Heap& inHeap)
     {
+        assert(inSize > 0);
+
         void* outBlock = inMemory;
 
         if (inMemory)
@@ -65,6 +67,7 @@ namespace CGE
             {
                 outBlock = allocate(inSize, inHeap);
                 memcpy(outBlock, inMemory, header->size);
+                release(inMemory);
             }
         }
         else

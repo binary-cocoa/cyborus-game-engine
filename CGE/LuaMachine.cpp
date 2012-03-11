@@ -33,8 +33,6 @@ namespace CGE
     LuaMachine::~LuaMachine()
     {
         lua_close(mLuaState);
-        std::cout << mAllocations << " allocations, "
-            << mReleases << " releases\n";
     }
 
     void LuaMachine::reset()

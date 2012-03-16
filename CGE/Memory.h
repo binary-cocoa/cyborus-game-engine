@@ -10,6 +10,8 @@ namespace CGE
     void* allocate(size_t inSize, Heap& inHeap);
     void* reallocate(void* inMemory, size_t inSize, Heap& inHeap);
     void release(void* inMemory);
+    size_t addReference(void* inMemory);
+    size_t removeReference(void* inMemory);
 }
 
 void* operator new(size_t inSize);

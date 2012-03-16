@@ -2,127 +2,92 @@
 #define REFERENCE_H
 
 #include <cstdlib>
+#include "Memory.h"
 
 namespace CGE
 {
     template<class T>
     class Reference
     {
-        class Container
-        {
-            public:
-                Container(T* inPointer = NULL) : mPointer(inPointer), mCount(1)
-                {
-                }
-
-                inline ~Container() { delete mPointer; }
-
-                inline void acquire()
-                {
-                    if (mPointer) ++mCount;
-                }
-
-                inline void release()
-                {
-                    if (mPointer && !--mCount) delete this;
-                }
-
-                inline T* pointer() { return mPointer; }
-                inline const T* pointer () const { return mPointer; }
-
-            private:
-                T* mPointer;
-                size_t mCount;
-        };
-
-        static Container NullReference;
-
         public:
-            Reference(T* inPointer = NULL) : mContainer(&NullReference)
+            Reference(T* inPointer = NULL) : mPointer(inPointer)
             {
-                if (inPointer) mContainer = new Container(inPointer);
+                addReference(mPointer);
             }
 
             Reference(const Reference& inReference)
             {
-                mContainer = inReference.mContainer;
-                mContainer->acquire();
+                mPointer = inReference.mPointer;
+                addReference(mPointer);
             }
 
             inline ~Reference()
             {
-                mContainer->release();
+                if (removeReference(mPointer) < 1) delete mPointer;
             }
 
             inline operator T*()
             {
-                return mContainer->pointer();
+                return mPointer;
             }
 
             inline operator const T*() const
             {
-                return mContainer->pointer();
+                return mPointer;
             }
 
             inline T* operator->()
             {
-                return mContainer->pointer();
+                return mPointer;
             }
 
             inline const T* operator->() const
             {
-                return mContainer->pointer();
+                return mPointer;
             }
 
-            inline T& operator*() { return *mContainer->pointer(); }
-            inline const T& operator*() const { return *mContainer->pointer(); }
+            inline T& operator*() { return *mPointer; }
+            inline const T& operator*() const { return *mPointer; }
 
             Reference& operator=(T* inPointer)
             {
-                mContainer->release();
-
-                if (inPointer)
-                    mContainer = new Container(inPointer);
-                else
-                    mContainer = &NullReference;
-
+                if (removeReference(mPointer) < 1) delete mPointer;
+                mPointer = inPointer;
+                addReference(mPointer);
                 return *this;
             }
 
             Reference& operator=(const Reference& inReference)
             {
-                mContainer->release();
-                mContainer = inReference.mContainer;
-                mContainer->acquire();
+                if (removeReference(mPointer) < 1) delete mPointer;
+                mPointer = inReference.mPointer;
+                addReference(mPointer);
                 return *this;
             }
 
             inline bool operator==(const Reference& inReference) const
             {
-                return mContainer == inReference.mContainer;
+                return mPointer == inReference.mPointer;
             }
 
             inline bool operator!=(const Reference& inReference) const
             {
-                return mContainer != inReference.mContainer;
+                return mPointer != inReference.mPointer;
             }
 
             inline bool operator==(const T* inPointer) const
             {
-                return mContainer->pointer() == inPointer;
+                return mPointer == inPointer;
             }
 
             inline bool operator!=(const T* inPointer) const
             {
-                return mContainer->pointer() != inPointer;
+                return mPointer != inPointer;
             }
 
         private:
-            Container* mContainer;
+            T* mPointer;
     };
-
-    template<class T>
-    typename Reference<T>::Container Reference<T>::NullReference;
 }
 
 #endif

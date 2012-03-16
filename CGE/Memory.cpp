@@ -14,11 +14,19 @@ namespace CGE
         Heap* heap;
         Header* next;
         Header* previous;
+        size_t references;
         size_t size;
         unsigned int canary;
     };
 
     static Header* gFirstHeader = NULL;
+
+    static Header* getHeader(void* inMemory)
+    {
+        Header* outHeader = (Header*)((char*)inMemory - sizeof(Header));
+        assert(outHeader->canary == Canary);
+        return outHeader;
+    }
 
     void* allocate(size_t inSize)
     {
@@ -63,10 +71,7 @@ namespace CGE
 
         if (inMemory)
         {
-            char* block = (char*)inMemory;
-            block -= sizeof(Header);
-            Header* header = (Header*)block;
-            assert(header->canary == Canary);
+            Header* header = getHeader(inMemory);
 
             if (header->size < inSize)
             {
@@ -87,10 +92,8 @@ namespace CGE
     {
         if (inMemory)
         {
-            char* block = (char*)inMemory;
-            block -= sizeof(Header);
-            Header* header = (Header*)block;
-            assert(header->canary == Canary);
+            Header* header = getHeader(inMemory);
+            assert(header->references < 1);
 
             header->heap->release(header->size);
 
@@ -99,8 +102,35 @@ namespace CGE
             if (header->next) header->next->previous = header->previous;
             if (header->previous) header->previous->next = header->next;
 
-            free(block);
+            free(header);
         }
+    }
+
+    size_t addReference(void* inMemory)
+    {
+        size_t outReferences = 0;
+
+        if (inMemory)
+        {
+            Header* header = getHeader(inMemory);
+            outReferences = ++header->references;
+        }
+
+        return outReferences;
+    }
+
+    size_t removeReference(void* inMemory)
+    {
+        size_t outReferences = 0;
+
+        if (inMemory)
+        {
+            Header* header = getHeader(inMemory);
+            assert(header->references > 0);
+            outReferences = --header->references;
+        }
+
+        return outReferences;
     }
 }
 

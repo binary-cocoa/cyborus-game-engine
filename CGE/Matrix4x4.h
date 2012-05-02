@@ -54,6 +54,7 @@ namespace CGE
             void copyInverseTo(Matrix4x4<T>& inMatrix) const;
             const Matrix4x4<T> inversed() const;
             void transform(const T* inVertex, T* inResult) const;
+            void transform(T* inVertex) const;
 
             /// Allow this object to behave as a simple array.
             inline operator T*() { return mData; }
@@ -555,6 +556,23 @@ namespace CGE
 
         inResult[3] = at(3, 0) * inVertex[0] + at(3, 1) * inVertex[1]
             + at(3, 2) * inVertex[2] + at(3, 3) * inVertex[3];
+
+        inResult[0] /= inResult[3];
+        inResult[1] /= inResult[3];
+        inResult[2] /= inResult[3];
+        inResult[3] = 1.0f;
+    }
+
+    template<typename T>
+    void Matrix4x4<T>::transform(T* inVertex) const
+    {
+        T tempVertex[4];
+        tempVertex[0] = inVertex[0];
+        tempVertex[1] = inVertex[1];
+        tempVertex[2] = inVertex[2];
+        tempVertex[3] = inVertex[3];
+
+        transform(tempVertex, inVertex);
     }
 
     /// This finds the inverse matrix and stores it into inMatrix.

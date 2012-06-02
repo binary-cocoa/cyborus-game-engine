@@ -1,15 +1,14 @@
 #ifndef USERINTERFACE_H
 #define USERINTERFACE_H
 
-#include "../Matrix4x4.h"
+#include "../MatrixNode.h"
 #include "../OpenGL/Program.h"
-#include "../SceneGraphNode.h"
 #include "Widget.h"
 #include <list>
 
 namespace CGE
 {
-    class UserInterface : protected SceneGraphNode
+    class UserInterface
     {
         public:
             UserInterface(float inRange = 4.0f);
@@ -46,6 +45,9 @@ namespace CGE
 
             GLuniform mUniMVPM;
             GLuniform mUniTexture;
+
+            Matrix4x4<float> mMatrix;
+            MatrixNode<float> mModelViewProjection;
     };
 }
 

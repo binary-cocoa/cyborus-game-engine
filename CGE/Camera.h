@@ -45,7 +45,9 @@ namespace CGE
             void unfollow(const float* inTarget,
                 bool inCopyTargetPosition = true);
 
-            void shakeCamera(double inMagnitude, double inSpeed, double inRateOfDecay);
+            void shakeCamera(double inMagnitude, double inSpeed,
+                double inRateOfDecay);
+
             void stopCameraShake();
 
         private:

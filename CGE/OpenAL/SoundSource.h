@@ -2,11 +2,10 @@
 #define SOUNDSOURCE_H
 
 #include "SoundBuffer.h"
-#include "../SceneGraphNode.h"
 
 namespace CGE
 {
-    class SoundSource : public SceneGraphNode
+    class SoundSource
     {
         public:
             SoundSource(const SoundBuffer& inSoundBuffer);

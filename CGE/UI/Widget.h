@@ -1,13 +1,13 @@
 #ifndef WIDGET_H
 #define WIDGET_H
 
-#include "../SceneGraphNode.h"
+#include "../MatrixNode.h"
 #include "../LuaReference.h"
 #include "../Memory.h"
 
 namespace CGE
 {
-    class Widget : public SceneGraphNode
+    class Widget
     {
         public:
             typedef void (*Callback)(Widget*, void*);
@@ -59,6 +59,8 @@ namespace CGE
                     && inY <= mY + mRadiusY;
             }
 
+            inline MatrixNode<float>& node() { return mModelViewProjection; }
+
             virtual void onEvent(Event inEvent, bool inIsClickCandidate);
             void setCallback(Event inEvent, const LuaReference& inCallback);
             void setCallback(Event inEvent, Callback inCallback,
@@ -73,6 +75,8 @@ namespace CGE
             float mRadiusX;
             float mRadiusY;
 
+            Matrix4x4<float> mMatrix;
+
         private:
             bool mEnabled;
             bool mCanHaveFocus;
@@ -81,6 +85,7 @@ namespace CGE
             LuaReference mCallbacks[NumEvents];
             Listener mCCallbacks[NumEvents];
 
+            MatrixNode<float> mModelViewProjection;
     };
 }
 

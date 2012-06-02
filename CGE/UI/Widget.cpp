@@ -17,7 +17,7 @@ namespace CGE
 
     Widget::Widget(bool inCanHaveFocus) : mX(0.0f), mY(0.0f), mRadiusX(0.0f),
         mRadiusY(0.0f), mEnabled(true), mCanHaveFocus(inCanHaveFocus),
-        mVisible(true)
+        mVisible(true), mModelViewProjection(mMatrix)
     {
         memset(mCCallbacks, 0, sizeof(mCCallbacks));
     }

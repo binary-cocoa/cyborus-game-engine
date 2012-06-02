@@ -116,9 +116,9 @@ namespace CGE
         float topEdge = mTarget[1] + (inverseV * mHeight);
         mY = (topEdge + bottomEdge) / 2.0f;
 
-        mTransform.loadIdentity();
-        mTransform.translate(mX + mExcess[0], mY + mExcess[1], 0.0f);
-        mTransform.scale(mRadiusX + mExcess[0], mRadiusY + mExcess[1], 0.0f);
+        mMatrix.loadIdentity();
+        mMatrix.translate(mX + mExcess[0], mY + mExcess[1], 0.0f);
+        mMatrix.scale(mRadiusX + mExcess[0], mRadiusY + mExcess[1], 0.0f);
     }
 
     void TextBox::lockRange(float& inValue)

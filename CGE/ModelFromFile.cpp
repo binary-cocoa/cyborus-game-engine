@@ -49,6 +49,7 @@ namespace CGE
 
         int size = c3m->vertices.size / 3;
         GLfloat* data = c3m->vertices.array;
+        (void)data;
 
         size = c3m->normals.size / 3;
         data = c3m->normals.array;

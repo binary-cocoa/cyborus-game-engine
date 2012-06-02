@@ -7,7 +7,7 @@
 		<Option compiler="gcc" />
 		<Build>
 			<Target title="Debug">
-				<Option output="../cge-ubu64-debug" prefix_auto="1" extension_auto="1" />
+				<Option output="../libcge-ubu64-debug" prefix_auto="1" extension_auto="1" />
 				<Option working_dir="" />
 				<Option object_output="obj/Debug/" />
 				<Option type="2" />
@@ -18,7 +18,7 @@
 				</Compiler>
 			</Target>
 			<Target title="Release">
-				<Option output="../cge-ubu64-release" prefix_auto="1" extension_auto="1" />
+				<Option output="../libcge-ubu64-release" prefix_auto="1" extension_auto="1" />
 				<Option working_dir="" />
 				<Option object_output="obj/Release/" />
 				<Option type="2" />
@@ -37,11 +37,10 @@
 			<Add directory="/usr/include/SDL" />
 			<Add directory="/usr/include/lua5.1" />
 		</Compiler>
-		<Unit filename="../CGE/Actor.cpp" />
-		<Unit filename="../CGE/Actor.h" />
 		<Unit filename="../CGE/Camera.cpp" />
 		<Unit filename="../CGE/Camera.h" />
 		<Unit filename="../CGE/Debug.h" />
+		<Unit filename="../CGE/Displayable.h" />
 		<Unit filename="../CGE/Download.cpp" />
 		<Unit filename="../CGE/Download.h" />
 		<Unit filename="../CGE/Engine.cpp" />
@@ -69,10 +68,9 @@
 		<Unit filename="../CGE/ManagedModule.h" />
 		<Unit filename="../CGE/Matrix.h" />
 		<Unit filename="../CGE/Matrix4x4.h" />
+		<Unit filename="../CGE/MatrixNode.h" />
 		<Unit filename="../CGE/Memory.cpp" />
 		<Unit filename="../CGE/Memory.h" />
-		<Unit filename="../CGE/Model.cpp" />
-		<Unit filename="../CGE/Model.h" />
 		<Unit filename="../CGE/ModelFromFile.cpp" />
 		<Unit filename="../CGE/ModelFromFile.h" />
 		<Unit filename="../CGE/Module.cpp" />
@@ -117,14 +115,8 @@
 		<Unit filename="../CGE/Platforms.h" />
 		<Unit filename="../CGE/PropertyList.cpp" />
 		<Unit filename="../CGE/PropertyList.h" />
-		<Unit filename="../CGE/PublicMatrixNode.cpp" />
-		<Unit filename="../CGE/PublicMatrixNode.h" />
 		<Unit filename="../CGE/Reference.h" />
-		<Unit filename="../CGE/RenderBin.cpp" />
-		<Unit filename="../CGE/RenderBin.h" />
 		<Unit filename="../CGE/ResourceManager.h" />
-		<Unit filename="../CGE/SceneGraphNode.cpp" />
-		<Unit filename="../CGE/SceneGraphNode.h" />
 		<Unit filename="../CGE/StopWatch.cpp" />
 		<Unit filename="../CGE/StopWatch.h" />
 		<Unit filename="../CGE/Thread.cpp" />

@@ -38,8 +38,9 @@ c3mModel* c3mOpen(const char* inFile)
     }
 
     char header[8];
-    size_t fr; /* "file read" variable to prevent compiler warnings */
-    fr = fread(header, sizeof(char), 7, fp);
+    size_t fr = fread(header, sizeof(char), 7, fp);
+    (void)fr;
+
     header[7] = '\0';
     if (strcmp(header, "CYBORUS"))
     {

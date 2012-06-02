@@ -7,7 +7,7 @@ namespace CGE
 {
     UserInterface::UserInterface(float inRange) : mRange(inRange), mRatio(0.0f),
         mMouseX(0.0f), mMouseY(0.0f), mMouseOverWidget(NULL),
-        mClickCandidate(NULL)
+        mClickCandidate(NULL), mModelViewProjection(mMatrix)
     {
         if (mRange < 1.0f) mRange = 1.0f;
 
@@ -66,7 +66,7 @@ namespace CGE
 
     void UserInterface::update()
     {
-        updateMatrices(mProjection);
+        mModelViewProjection.multiplyAll(mProjection);
     }
 
     void UserInterface::display()
@@ -80,7 +80,8 @@ namespace CGE
             i != mWidgets.end(); ++i)
         {
             Widget* w = *i;
-            glUniformMatrix4fv(mUniMVPM, 1, GL_FALSE, w->compositeMatrix());
+            glUniformMatrix4fv(mUniMVPM, 1, GL_FALSE,
+                w->node().compositeMatrix());
             w->display();
         }
 
@@ -90,7 +91,7 @@ namespace CGE
     void UserInterface::addWidget(Widget* inWidget)
     {
         mWidgets.push_back(inWidget);
-        addChildNode(inWidget);
+        mModelViewProjection.addChildNode(inWidget->node());
     }
 
     void UserInterface::removeWidget(Widget* inWidget)
@@ -98,7 +99,7 @@ namespace CGE
         if (mMouseOverWidget == inWidget) mMouseOverWidget = NULL;
 
         mWidgets.remove(inWidget);
-        removeChildNode(inWidget);
+        mModelViewProjection.removeChildNode(inWidget->node());
     }
 
     void UserInterface::onResize(int inWidth, int inHeight)

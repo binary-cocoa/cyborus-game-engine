@@ -1,7 +1,7 @@
 #ifndef MODELFROMFILE_H
 #define MODELFROMFILE_H
 
-#include "Model.h"
+#include "Displayable.h"
 #include "OpenGL/Texture2D.h"
 #include "OpenGL/InterleavedVBO.h"
 #include "c3m.h"
@@ -11,7 +11,7 @@
 
 namespace CGE
 {
-    class ModelFromFile : public Model
+    class ModelFromFile : public Displayable
     {
         public:
             ModelFromFile(const char* inFile);

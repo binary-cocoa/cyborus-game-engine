@@ -72,8 +72,8 @@ namespace CGE
         mX = inX;
         mY = inY;
 
-        mTransform.loadIdentity();
-        mTransform.translate(mX, mY, 0.0f);
+        mMatrix.loadIdentity();
+        mMatrix.translate(mX, mY, 0.0f);
     }
 
 }

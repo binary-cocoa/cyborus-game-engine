@@ -36,10 +36,6 @@
 			<Add option="-Wall" />
 			<Add option="-DCURL_STATICLIB" />
 		</Compiler>
-		<Unit filename="..\CGE\Actor.cpp" />
-		<Unit filename="..\CGE\Actor.h" />
-		<Unit filename="..\CGE\C3MActor.cpp" />
-		<Unit filename="..\CGE\C3MActor.h" />
 		<Unit filename="..\CGE\Camera.cpp" />
 		<Unit filename="..\CGE\Camera.h" />
 		<Unit filename="..\CGE\Debug.h" />
@@ -75,8 +71,6 @@
 			<Option weight="0" />
 		</Unit>
 		<Unit filename="..\CGE\Memory.h" />
-		<Unit filename="..\CGE\Model.cpp" />
-		<Unit filename="..\CGE\Model.h" />
 		<Unit filename="..\CGE\ModelFromFile.cpp" />
 		<Unit filename="..\CGE\ModelFromFile.h" />
 		<Unit filename="..\CGE\Module.cpp" />
@@ -121,14 +115,8 @@
 		<Unit filename="..\CGE\Platforms.h" />
 		<Unit filename="..\CGE\PropertyList.cpp" />
 		<Unit filename="..\CGE\PropertyList.h" />
-		<Unit filename="..\CGE\PublicMatrixNode.cpp" />
-		<Unit filename="..\CGE\PublicMatrixNode.h" />
 		<Unit filename="..\CGE\Reference.h" />
-		<Unit filename="..\CGE\RenderBin.cpp" />
-		<Unit filename="..\CGE\RenderBin.h" />
 		<Unit filename="..\CGE\ResourceManager.h" />
-		<Unit filename="..\CGE\SceneGraphNode.cpp" />
-		<Unit filename="..\CGE\SceneGraphNode.h" />
 		<Unit filename="..\CGE\StopWatch.cpp" />
 		<Unit filename="..\CGE\StopWatch.h" />
 		<Unit filename="..\CGE\Thread.cpp" />

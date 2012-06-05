@@ -13,7 +13,7 @@ namespace CGE
             MatrixNode(const Matrix4x4<T>& inLocalMatrix);
             virtual ~MatrixNode();
 
-            void multiplyAll(const Matrix4x4<T>& inMatrix);
+            void multiplyAll(const Matrix4x4<T>& inMatrix = Matrix4x4<T>());
             void addChildNode(MatrixNode& inMatrixNode);
             void removeChildNode(MatrixNode& inMatrixNode);
             void detach();

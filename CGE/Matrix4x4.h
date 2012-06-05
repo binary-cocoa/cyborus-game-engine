@@ -53,7 +53,9 @@ namespace CGE
             void inverse();
             void copyInverseTo(Matrix4x4<T>& inMatrix) const;
             const Matrix4x4<T> inversed() const;
+            void multiply(const T* inVertex, T* inResult) const;
             void transform(const T* inVertex, T* inResult) const;
+            void transform(T* inVertex) const;
 
             /// Allow this object to behave as a simple array.
             inline operator T*() { return mData; }
@@ -542,7 +544,7 @@ namespace CGE
     }
 
     template<typename T>
-    void Matrix4x4<T>::transform(const T* inVertex, T* inResult) const
+    void Matrix4x4<T>::multiply(const T* inVertex, T* inResult) const
     {
         inResult[0] = at(0, 0) * inVertex[0] + at(0, 1) * inVertex[1]
             + at(0, 2) * inVertex[2] + at(0, 3) * inVertex[3];
@@ -555,6 +557,29 @@ namespace CGE
 
         inResult[3] = at(3, 0) * inVertex[0] + at(3, 1) * inVertex[1]
             + at(3, 2) * inVertex[2] + at(3, 3) * inVertex[3];
+    }
+
+    template<typename T>
+    void Matrix4x4<T>::transform(const T* inVertex, T* inResult) const
+    {
+        T vertex[4];
+        memcpy(vertex, inVertex, 3 * sizeof(T));
+        vertex[3] = 1.0f;
+
+        T result[4];
+        multiply(vertex, result);
+
+        inResult[0] = result[0] / result[3];
+        inResult[1] = result[1] / result[3];
+        inResult[2] = result[2] / result[3];
+    }
+
+    template<typename T>
+    void Matrix4x4<T>::transform(T* inVertex) const
+    {
+        T vertex[4];
+        memcpy(vertex, inVertex, 4 * sizeof(T));
+        transform(vertex, inVertex);
     }
 
     /// This finds the inverse matrix and stores it into inMatrix.
